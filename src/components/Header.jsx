@@ -48,7 +48,11 @@ export default function Header() {
   return (
     <header className="header">
       <div className="header__inner container">
-        <a className="header__logo" href="/" aria-label="FutureCap Funding Group — home">
+        <a
+          className="header__logo"
+          href={import.meta.env.BASE_URL}
+          aria-label="FutureCap Funding Group — home"
+        >
           <img src={logo} alt="FutureCap Funding Group" width="2079" height="756" />
         </a>
 
