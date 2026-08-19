@@ -1,0 +1,94 @@
+.financing {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(180deg, #ffffff 0%, var(--surface-2) 100%);
+  padding-block: clamp(3.5rem, 7vw, 6rem);
+}
+
+/* Oversized dark-green circle anchored off the bottom-left corner. */
+.financing__blob {
+  position: absolute;
+  left: min(-30vw, -380px);
+  bottom: min(-38vw, -460px);
+  width: max(70vw, 820px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--green-800);
+}
+
+.financing__inner {
+  position: relative;
+  z-index: 1;
+}
+
+.financing__heading {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.financing__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+  max-width: 1080px;
+  margin-inline: auto;
+}
+
+.product-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: clamp(1.5rem, 2.6vw, 2.15rem);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.product-card:hover {
+  box-shadow: var(--shadow-card-hover);
+  transform: translateY(-2px);
+}
+
+.product-card__title {
+  font-size: clamp(1.3rem, 2vw, 1.6rem);
+  font-weight: 700;
+  margin-bottom: 0.85rem;
+}
+
+.product-card__body {
+  font-size: 0.95rem;
+  margin-bottom: 1.5rem;
+}
+
+.product-card__points {
+  gap: 0.75rem;
+  margin-bottom: 1.85rem;
+}
+
+.product-card__points li {
+  font-size: 0.9rem;
+}
+
+.product-card__cta {
+  margin-top: auto;
+}
+
+@media (max-width: 860px) {
+  .financing__grid {
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 560px;
+  }
+
+  .financing__blob {
+    left: -55vw;
+    bottom: -60vw;
+    width: 130vw;
+  }
+}

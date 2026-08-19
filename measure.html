@@ -1,0 +1,13 @@
+<!doctype html><html><head><style>
+body{margin:0;font:14px/1.6 ui-monospace,Menlo,monospace;padding:14px}
+iframe{position:absolute;left:-9999px;width:1440px;height:3000px;border:0}
+</style></head><body><iframe id="f" src="/" scrolling="no"></iframe><pre id="out">…</pre>
+<script>
+const f=document.getElementById('f');
+f.addEventListener('load',()=>setTimeout(()=>{
+ const d=f.contentDocument;
+ const r=s=>{const e=d.querySelector(s);const b=e.getBoundingClientRect();
+  return s.padEnd(18)+' top='+b.top.toFixed(0).padStart(5)+' bottom='+b.bottom.toFixed(0).padStart(5)+' height='+b.height.toFixed(0).padStart(5);};
+ document.getElementById('out').textContent=[r('.hero'),r('.hero__inner'),r('.hero__headline'),r('.hero__card')].join('\n');
+},700));
+</script></body></html>
