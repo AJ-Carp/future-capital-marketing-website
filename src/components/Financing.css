@@ -1,19 +1,10 @@
 .financing {
   position: relative;
   overflow: hidden;
-  background: linear-gradient(180deg, #ffffff 0%, var(--surface-2) 100%);
+  /* Resolves back to white at the bottom so it meets the Steps section
+     seamlessly — landing on --surface-2 left a visible hairline. */
+  background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 55%, var(--surface) 100%);
   padding-block: clamp(3.5rem, 7vw, 6rem);
-}
-
-/* Oversized dark-green circle anchored off the bottom-left corner. */
-.financing__blob {
-  position: absolute;
-  left: min(-30vw, -380px);
-  bottom: min(-38vw, -460px);
-  width: max(70vw, 820px);
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: var(--green-800);
 }
 
 .financing__inner {
@@ -84,11 +75,5 @@
   .financing__grid {
     grid-template-columns: minmax(0, 1fr);
     max-width: 560px;
-  }
-
-  .financing__blob {
-    left: -55vw;
-    bottom: -60vw;
-    width: 130vw;
   }
 }

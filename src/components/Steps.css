@@ -1,15 +1,24 @@
 .steps {
+  margin-top: 3%;
+  margin-bottom: 3%;
   position: relative;
-  overflow: hidden;
+  /* The swoosh reaches up into the section above, so it must not be clipped. */
+  overflow: visible;
   background: var(--surface);
   padding-block: clamp(2rem, 4vw, 3rem) clamp(3.5rem, 7vw, 6rem);
 }
 
 .steps__swoosh {
+  /* 1010 viewBox units tall, of which the top 610 (60%) sit above this
+     section — that upper part is the lobe behind the financing cards. */
+  --swoosh-h: clamp(564px, 70.5vw, 1010px);
   position: absolute;
-  inset: 0 0 auto;
+  left: 0;
+  right: 0;
+  top: calc(var(--swoosh-h) * -0.604);
   width: 100%;
-  height: clamp(220px, 27vw, 400px);
+  height: var(--swoosh-h);
+  pointer-events: none;
 }
 
 .steps__inner {
@@ -29,7 +38,8 @@
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--arrow-gap);
-  align-items: start;
+  /* stretch, so all three cards match the tallest one */
+  align-items: stretch;
   max-width: 1140px;
   margin-inline: auto;
 }
@@ -63,19 +73,27 @@
   text-align: left;
 }
 
+/* Sit in the gutter between cards, with the tail tucked back under the card it
+   leaves from. The negative z-index is what puts it there: .step-card creates
+   no stacking context, so the arrow drops behind the card's own background
+   while staying above the green band. Adding a transform, filter, opacity or
+   z-index to .step-card would trap the arrow in front again. */
 .step-card__arrow {
   position: absolute;
-  left: calc(100% - 0.75rem);
-  width: calc(var(--arrow-gap) + 1.5rem);
+  left: calc(96% - 0.5rem);
+  width: calc(var(--arrow-gap) + 1rem);
   height: auto;
+  z-index: -1;
+  pointer-events: none;
 }
 
+/* Percentages, so the arrows keep their place as the cards change height. */
 .step-card__arrow--1 {
-  top: 8.5rem;
+  top: 52%;
 }
 
 .step-card__arrow--2 {
-  top: 5rem;
+  top: 40%;
 }
 
 @media (max-width: 900px) {
@@ -90,7 +108,9 @@
     text-align: center;
   }
 
+  /* Cards stack, so there is no gutter left to draw a connector in. */
   .step-card__arrow {
     display: none;
+    
   }
 }

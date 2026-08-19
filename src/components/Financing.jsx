@@ -5,8 +5,8 @@ import './Financing.css'
 export default function Financing() {
   return (
     <section className="financing" aria-labelledby="financing-heading">
-      <span className="financing__blob" aria-hidden="true" />
-
+      {/* The green lobe that rises into this section is drawn by the Steps
+          swoosh, so the two read as one continuous shape. */}
       <div className="financing__inner container">
         {/* The design has no visible section title; this keeps the section
             labelled for screen readers and search engines. */}
