@@ -9,8 +9,10 @@
 }
 
 .steps__swoosh {
-  /* 1010 viewBox units tall, of which the top 610 (60%) sit above this
-     section — that upper part is the lobe behind the financing cards. */
+  /* Rendered height, not viewBox units: the 860-unit viewBox is stretched to
+     fill this box (preserveAspectRatio="none"). The top ~60% is pulled above
+     this section by the offset below — that part is the lobe that rises behind
+     the financing cards. */
   --swoosh-h: clamp(564px, 70.5vw, 1010px);
   position: absolute;
   left: 0;
@@ -21,16 +23,16 @@
   pointer-events: none;
 }
 
+/* Set here rather than as a fill attribute so the brand token is the single
+   source of truth. Scoped to the base path — the gold-wash paths above it keep
+   their own gradient fills. */
+.steps__swoosh-base {
+  fill: var(--green-800);
+}
+
 .steps__inner {
   position: relative;
   z-index: 1;
-}
-
-.steps__heading {
-  font-weight: 300;
-  font-size: clamp(1.6rem, 3.4vw, 2.6rem);
-  margin-left: clamp(0rem, 8vw, 7rem);
-  margin-bottom: clamp(2rem, 4vw, 3.25rem);
 }
 
 .steps__row {
@@ -44,21 +46,41 @@
   margin-inline: auto;
 }
 
+/* Positioning context for the connector arrow only — no background, and
+   deliberately nothing that would make it a stacking context. */
 .step-card {
   position: relative;
+}
+
+.step-card__panel {
+  height: 100%;
   background: var(--surface);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-card);
   padding: clamp(1.25rem, 2.2vw, 1.85rem);
   text-align: center;
+  transition: box-shadow 0.28s var(--ease-out), transform 0.28s var(--ease-out);
 }
 
+.step-card:hover .step-card__panel {
+  box-shadow: var(--shadow-card-hover);
+  transform: translateY(-4px);
+}
+
+/* Pill rather than plain bold text, so the sequence reads at a glance. */
 .step-card__label {
+  display: inline-block;
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 1.05rem;
-  color: var(--ink);
-  margin-bottom: 0.5rem;
+  font-size: 0.76rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #fff;
+  background: linear-gradient(135deg, var(--green-700), var(--green-500));
+  border-radius: 999px;
+  padding: 0.32rem 0.95rem;
+  margin-bottom: 0.85rem;
+  box-shadow: 0 10px 18px -12px rgba(28, 92, 67, 0.9);
 }
 
 .step-card__title {
@@ -75,9 +97,11 @@
 
 /* Sit in the gutter between cards, with the tail tucked back under the card it
    leaves from. The negative z-index is what puts it there: .step-card creates
-   no stacking context, so the arrow drops behind the card's own background
-   while staying above the green band. Adding a transform, filter, opacity or
-   z-index to .step-card would trap the arrow in front again. */
+   no stacking context, so the arrow drops behind .step-card__panel's
+   background while staying above the green band. Adding a transform, filter,
+   opacity or z-index to .step-card would trap the arrow in front again —
+   that is why the hover lift and the scroll reveal both target the inner
+   .step-card__panel instead. */
 .step-card__arrow {
   position: absolute;
   left: calc(96% - 0.5rem);

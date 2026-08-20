@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { DEPOSIT_RANGES, REQUIREMENTS } from '../data/content.js'
-import { ChevronIcon, RequirementIcon } from './Icons.jsx'
+import { ArrowRightIcon, ChevronIcon, RequirementIcon } from './Icons.jsx'
+import revealRef from '../lib/revealOnScroll.js'
 import './ApplyCta.css'
 
 const EMPTY_FORM = {
@@ -73,17 +74,34 @@ export default function ApplyCta() {
     <section className="apply" id="apply" aria-labelledby="apply-heading">
       <div className="apply__inner container">
         <div className="apply__copy">
-          <h2 className="display-heading apply__heading" id="apply-heading">
+          <h2 className="display-heading apply__heading" id="apply-heading" data-reveal ref={revealRef}>
             FutureCap has got your back
           </h2>
-          <p className="apply__subhead">
+          <p
+            className="apply__subhead"
+            data-reveal
+            ref={revealRef}
+            style={{ '--reveal-delay': '90ms' }}
+          >
             Apply now and be approved for up to $500,000 in less than 4 hours
           </p>
 
-          <h3 className="apply__list-title">In general, you will need:</h3>
+          <h3
+            className="apply__list-title"
+            data-reveal
+            ref={revealRef}
+            style={{ '--reveal-delay': '170ms' }}
+          >
+            In general, you will need:
+          </h3>
           <ul className="apply__requirements">
-            {REQUIREMENTS.map((requirement) => (
-              <li key={requirement.icon}>
+            {REQUIREMENTS.map((requirement, index) => (
+              <li
+                key={requirement.icon}
+                data-reveal="left"
+                ref={revealRef}
+                style={{ '--reveal-delay': `${250 + index * 90}ms` }}
+              >
                 <span className={`req-icon req-icon--${requirement.icon}`}>
                   <RequirementIcon name={requirement.icon} width="26" height="26" />
                 </span>
@@ -93,9 +111,22 @@ export default function ApplyCta() {
           </ul>
         </div>
 
-        <div className="apply__panel">
+        <div
+          className="apply__panel"
+          data-reveal="right"
+          ref={revealRef}
+          style={{ '--reveal-delay': '120ms' }}
+        >
           {submitted ? (
             <div className="apply__success" role="status">
+              {/* Stroke-drawn tick — the one moment on the page worth a small
+                  flourish, since it confirms the visitor's application. */}
+              <span className="apply__success-mark" aria-hidden="true">
+                <svg viewBox="0 0 52 52" fill="none" stroke="currentColor">
+                  <circle className="apply__success-ring" cx="26" cy="26" r="24" />
+                  <path className="apply__success-tick" d="M15 27 22.5 34.5 37.5 18.5" />
+                </svg>
+              </span>
               <h3>Thanks — we have your details.</h3>
               <p>
                 A FutureCap funding advisor will reach out shortly to walk you through
@@ -202,6 +233,7 @@ export default function ApplyCta() {
 
               <button className="btn btn--gold apply__submit" type="submit">
                 Submit
+                <ArrowRightIcon />
               </button>
             </form>
           )}

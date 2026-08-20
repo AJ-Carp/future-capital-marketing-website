@@ -1,10 +1,28 @@
 .apply {
+  position: relative;
+  overflow: hidden;
   background: var(--navy-800);
   color: #fff;
   padding-block: clamp(3rem, 6vw, 5rem);
 }
 
+/* Mirror of the hero's colour wash, so the two navy bands bookend the page as
+   a matched pair. */
+.apply::before {
+  content: '';
+  position: absolute;
+  inset: -25%;
+  background:
+    radial-gradient(36% 44% at 84% 24%, rgba(47, 163, 110, 0.3), transparent 68%),
+    radial-gradient(30% 38% at 12% 14%, rgba(193, 154, 75, 0.2), transparent 70%),
+    radial-gradient(44% 50% at 32% 94%, rgba(28, 92, 67, 0.45), transparent 72%);
+  animation: aurora-drift 30s ease-in-out infinite alternate-reverse;
+  pointer-events: none;
+}
+
 .apply__inner {
+  position: relative;
+  z-index: 1;
   display: grid;
   grid-template-columns: minmax(0, 0.92fr) minmax(0, 1fr);
   gap: clamp(2rem, 5vw, 4.5rem);
@@ -53,6 +71,14 @@
   border: 1.5px solid rgba(255, 255, 255, 0.55);
   background: rgba(255, 255, 255, 0.06);
   color: #fff;
+  transition: transform 0.28s var(--ease-out), box-shadow 0.28s var(--ease-out),
+    border-color 0.28s ease;
+}
+
+.apply__requirements li:hover .req-icon {
+  transform: translateY(-4px) scale(1.05);
+  border-color: var(--mint-400);
+  box-shadow: 0 16px 26px -16px rgba(0, 0, 0, 0.85);
 }
 
 .req-icon--dollar {
@@ -108,6 +134,11 @@
   font-size: 0.95rem;
   color: var(--ink);
   line-height: 1.35;
+  transition: color 0.18s ease;
+}
+
+.field:focus-within > label {
+  color: var(--green-700);
 }
 
 .field input[type='text'],
@@ -197,8 +228,58 @@
 
 .apply__success {
   display: grid;
+  justify-items: center;
+  text-align: center;
   gap: 0.75rem;
   padding-block: clamp(1.5rem, 4vw, 3rem);
+  animation: rise-in 0.5s var(--ease-out) both;
+}
+
+.apply__success-mark {
+  display: block;
+  width: 72px;
+  height: 72px;
+  margin-bottom: 0.5rem;
+  color: var(--green-600);
+}
+
+.apply__success-mark svg {
+  width: 100%;
+  height: 100%;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Ring sweeps round first, then the tick draws inside it. */
+.apply__success-ring {
+  stroke-dasharray: 152;
+  transform-origin: center;
+  transform: rotate(-90deg);
+  animation: draw-ring 0.6s var(--ease-out) both;
+}
+
+.apply__success-tick {
+  stroke-dasharray: 34;
+  animation: draw-tick 0.35s var(--ease-out) 0.45s both;
+}
+
+@keyframes draw-ring {
+  from {
+    stroke-dashoffset: 152;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes draw-tick {
+  from {
+    stroke-dashoffset: 34;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
 }
 
 .apply__success h3 {

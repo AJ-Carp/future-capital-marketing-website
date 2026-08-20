@@ -5,6 +5,20 @@
   color: #fff;
 }
 
+/* Blurred brand-colour washes that wander behind the navy. Sits under
+   .hero__inner, which already carries z-index: 1. */
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: -25%;
+  background:
+    radial-gradient(38% 46% at 16% 26%, rgba(47, 163, 110, 0.34), transparent 68%),
+    radial-gradient(32% 42% at 82% 10%, rgba(193, 154, 75, 0.24), transparent 70%),
+    radial-gradient(46% 52% at 62% 92%, rgba(28, 92, 67, 0.5), transparent 72%);
+  animation: aurora-drift 26s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
 .hero__inner {
   position: relative;
   z-index: 1;
@@ -27,6 +41,7 @@
   font-size: clamp(1.35rem, 1.9vw, 1.75rem);
   margin-bottom: clamp(1rem, 2vw, 1.5rem);
   width: 600px;
+  animation: rise-in 0.85s var(--ease-out) 0.05s both;
 }
 
 .hero__card {
@@ -40,6 +55,7 @@
   min-height: 425px;
   /* Pins the card to the bottom edge of the section, as in the design. */
   margin-top: auto;
+  animation: rise-in 0.9s var(--ease-out) 0.18s both;
 }
 
 .hero__title {
@@ -63,7 +79,37 @@
   color: var(--body);
 }
 
+/* Ticks draw themselves in, one after the next, once the card has landed. */
+.hero__points .check-icon path {
+  animation: draw-check 0.45s var(--ease-out) both;
+}
+
+.hero__points li:nth-child(1) .check-icon path {
+  animation-delay: 0.6s;
+}
+
+.hero__points li:nth-child(2) .check-icon path {
+  animation-delay: 0.72s;
+}
+
+.hero__points li:nth-child(3) .check-icon path {
+  animation-delay: 0.84s;
+}
+
+.hero__points li:nth-child(4) .check-icon path {
+  animation-delay: 0.96s;
+}
+
+.hero__points li:nth-child(5) .check-icon path {
+  animation-delay: 1.08s;
+}
+
+.hero__points li:nth-child(n + 6) .check-icon path {
+  animation-delay: 1.2s;
+}
+
 .hero__link {
+  position: relative;
   display: inline-block;
   color: var(--link);
   font-weight: 600;
@@ -71,8 +117,22 @@
   text-decoration: none;
 }
 
-.hero__link:hover {
-  text-decoration: underline;
+/* Underline that grows from the left rather than the browser's instant one. */
+.hero__link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 1.5px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.28s var(--ease-out);
+}
+
+.hero__link:hover::after {
+  transform: scaleX(1);
 }
 
 .hero__cta {
@@ -86,6 +146,7 @@
   position: relative;
   align-self: stretch;
   min-height: 490px;
+  animation: fade-in 1.1s ease 0.1s both;
 }
 
 .hero__arrow {
@@ -104,6 +165,8 @@
   height: 78%;
   object-fit: cover;
   border-radius: 80% 0 80% 0 / 60% 0 60% 0;
+  /* drop-shadow follows the organic mask; box-shadow would draw a rectangle. */
+  filter: drop-shadow(0 26px 42px rgba(0, 0, 0, 0.45));
 }
 
 /* .hero__photo {
@@ -117,6 +180,10 @@
 @media (max-width: 1000px) {
   .hero__inner {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .hero__headline {
+    max-width: 100%;
   }
 
   .hero__card {

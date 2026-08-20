@@ -1,5 +1,6 @@
 import { PRODUCTS } from '../data/content.js'
-import { CheckIcon } from './Icons.jsx'
+import { ArrowRightIcon, CheckIcon } from './Icons.jsx'
+import revealRef from '../lib/revealOnScroll.js'
 import './Financing.css'
 
 export default function Financing() {
@@ -10,13 +11,21 @@ export default function Financing() {
       <div className="financing__inner container">
         {/* The design has no visible section title; this keeps the section
             labelled for screen readers and search engines. */}
-        <h2 className="financing__heading" id="financing-heading">
+        <h2 className="visually-hidden" id="financing-heading">
           Financing options
         </h2>
 
         <ul className="financing__grid">
-          {PRODUCTS.map((product) => (
-            <li className="product-card" id={product.id} key={product.id}>
+          {PRODUCTS.map((product, index) => (
+            <li
+              className="product-card"
+              id={product.id}
+              key={product.id}
+              data-reveal
+              ref={revealRef}
+              /* Cards arrive in reading order rather than all at once. */
+              style={{ '--reveal-delay': `${index * 110}ms` }}
+            >
               <h3 className="product-card__title">{product.title}</h3>
               <p className="product-card__body">{product.body}</p>
 
@@ -31,6 +40,7 @@ export default function Financing() {
 
               <a className="btn btn--gold product-card__cta" href="#apply">
                 Get Started
+                <ArrowRightIcon />
               </a>
             </li>
           ))}

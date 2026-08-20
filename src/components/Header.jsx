@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { NAV, PHONE, PORTAL_URL } from '../data/content.js'
 import { ChevronIcon, MenuIcon, PhoneIcon, UserIcon } from './Icons.jsx'
+import useScrollProgress from '../hooks/useScrollProgress.js'
 import logo from '../assets/FCFG-logo.png'
 import './Header.css'
 
@@ -9,6 +10,7 @@ export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [mobileGroup, setMobileGroup] = useState(null)
   const navRef = useRef(null)
+  const { scrolled, progressRef } = useScrollProgress()
 
   // Close the desktop dropdown on outside click or Escape.
   useEffect(() => {
@@ -46,7 +48,11 @@ export default function Header() {
   }
 
   return (
-    <header className="header">
+    <header className={`header${scrolled ? ' is-scrolled' : ''}`}>
+      {/* Reading progress along the header's bottom edge. scaleX keeps this on
+          the compositor — no layout work as the page scrolls. */}
+      <div className="header__progress" ref={progressRef} aria-hidden="true" />
+
       <div className="header__inner container">
         <a
           className="header__logo"

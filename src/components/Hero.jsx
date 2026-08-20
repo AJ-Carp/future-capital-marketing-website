@@ -1,5 +1,5 @@
 import { HERO } from '../data/content.js'
-import { CheckIcon } from './Icons.jsx'
+import { ArrowRightIcon, CheckIcon } from './Icons.jsx'
 import photo from '../assets/small-business-owners.jpg'
 import artwork from '../assets/hero-arrow.png'
 import './Hero.css'
@@ -10,7 +10,6 @@ export default function Hero() {
       <div className="hero__inner container">
         <div className="hero__copy">
           <h1 className="display-heading hero__headline">{HERO.headline}</h1>
-
           <div className="hero__card">
             <h2 className="hero__title">{HERO.title}</h2>
             <p className="hero__body">{HERO.body}</p>
@@ -29,8 +28,9 @@ export default function Hero() {
             </a>
 
             <div className="hero__cta">
-              <a className="btn btn--gold" href="#apply">
+              <a className="btn btn--gold-outline" href="#apply">
                 {HERO.ctaText}
+                <ArrowRightIcon />
               </a>
             </div>
           </div>

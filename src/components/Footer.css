@@ -1,6 +1,23 @@
 .footer {
+  position: relative;
   background: var(--surface);
   color: var(--body);
+}
+
+/* Brand hairline closing the navy apply band above. */
+.footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    var(--green-700),
+    var(--mint-400) 50%,
+    var(--gold)
+  );
 }
 
 .footer__inner {
@@ -16,6 +33,15 @@
   height: 52px;
   width: auto;
   margin-bottom: 1.25rem;
+}
+
+.footer__contact a,
+.footer__col a {
+  transition: color 0.18s ease, transform 0.22s var(--ease-out);
+}
+
+.footer__contact a:hover {
+  transform: translateX(3px);
 }
 
 .footer__blurb {
@@ -79,6 +105,7 @@
 }
 
 .footer__col a {
+  display: inline-block;
   font-size: 0.9rem;
   color: var(--body);
   text-decoration: none;
@@ -87,6 +114,7 @@
 .footer__col a:hover {
   color: var(--green-600);
   text-decoration: underline;
+  transform: translateX(3px);
 }
 
 /* --- Legal band ---------------------------------------------------------- */

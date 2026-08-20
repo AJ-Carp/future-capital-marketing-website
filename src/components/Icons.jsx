@@ -42,6 +42,26 @@ export function ChevronIcon(props) {
   )
 }
 
+export function ArrowRightIcon(props) {
+  return (
+    <svg
+      className="btn__arrow"
+      width="16"
+      height="16"
+      viewBox="0 0 20 20"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      {...props}
+    >
+      <path d="M3.5 10h12M10.5 5l5 5-5 5" />
+    </svg>
+  )
+}
+
 export function PhoneIcon(props) {
   return (
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true" {...props}>

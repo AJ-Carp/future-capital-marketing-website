@@ -14,6 +14,10 @@
   --mint-400: #3ec99a;
   --gold: #c19a4b; /* primary CTA */
   --gold-dark: #a9833a;
+  /* Gold dark enough to read as body/label text on white (5.03:1). The brand
+     golds above only reach 2.6:1 and 3.5:1, so they stay in fills and borders
+     where contrast minimums do not apply. */
+  --gold-ink: #8a6a2c;
   --link: #1657d0;
 
   /* Neutrals */
@@ -38,6 +42,11 @@
   --shadow-card-hover: 0 26px 52px -24px rgba(16, 24, 40, 0.42),
     0 4px 10px rgba(16, 24, 40, 0.07);
   --shadow-panel: 0 30px 70px -30px rgba(0, 0, 0, 0.45);
+
+  /* Motion — one easing curve for the whole site, so everything feels related */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --accent-gradient: linear-gradient(120deg, var(--green-600), var(--mint-400));
+  --gold-gradient: linear-gradient(135deg, #d5b268 0%, var(--gold) 48%, var(--gold-dark) 100%);
 
   /* Layout */
   --container: 1240px;
@@ -121,6 +130,26 @@ ol {
   padding-inline: var(--gutter);
 }
 
+/* Anchor targets (nav dropdown links, "Apply now", the product cards) would
+   otherwise scroll flush to y=0 and sit behind the sticky header. Sized off the
+   taller, un-condensed header so the target always clears it. */
+[id] {
+  scroll-margin-top: calc(var(--header-h) + 1rem);
+}
+
+/* Visually hidden but still announced — used for section headings the design
+   does not show. */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 .skip-link {
   position: absolute;
   left: 50%;
@@ -161,23 +190,63 @@ ol {
   padding: 0.8rem 1.5rem;
   cursor: pointer;
   text-decoration: none;
-  transition: background-color 0.18s ease, transform 0.18s ease,
-    box-shadow 0.18s ease;
+  transition: transform 0.22s var(--ease-out), box-shadow 0.22s var(--ease-out),
+    filter 0.22s ease;
 }
 
 .btn--gold {
-  background: var(--gold);
+  background: var(--gold-gradient);
   color: #fff;
-  box-shadow: 0 10px 20px -12px rgba(169, 131, 58, 0.9);
+  box-shadow: 0 12px 24px -12px rgba(169, 131, 58, 0.95),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28);
 }
 
 .btn--gold:hover {
-  background: var(--gold-dark);
-  transform: translateY(-1px);
+  filter: brightness(1.04);
+  transform: translateY(-2px);
+  box-shadow: 0 18px 30px -14px rgba(169, 131, 58, 1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.34);
 }
 
 .btn--gold:active {
   transform: translateY(0);
+  box-shadow: 0 6px 14px -10px rgba(169, 131, 58, 0.9);
+}
+
+/* Inverted gold CTA — white fill, gradient gold edge, gold label.
+   The edge uses the two-layer background trick: white painted to the padding
+   box, the gold gradient to the border box, with a transparent border letting
+   the gradient show through. A plain `border` cannot hold a gradient.
+   Padding is trimmed by the border width so this sits at the same overall size
+   as the filled .btn--gold. */
+.btn--gold-outline {
+  border: 2px solid transparent;
+  padding: calc(0.8rem - 2px) calc(1.5rem - 2px);
+  background:
+    linear-gradient(var(--surface), var(--surface)) padding-box,
+    var(--gold-gradient) border-box;
+  color: var(--gold-ink);
+  box-shadow: 0 10px 22px -14px rgba(169, 131, 58, 0.8);
+}
+
+.btn--gold-outline:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 30px -16px rgba(169, 131, 58, 0.95);
+}
+
+.btn--gold-outline:active {
+  transform: translateY(0);
+  box-shadow: 0 6px 14px -12px rgba(169, 131, 58, 0.8);
+}
+
+/* Nudges forward with the button, so the CTA reads as "go". */
+.btn__arrow {
+  flex: none;
+  transition: transform 0.22s var(--ease-out);
+}
+
+.btn:hover .btn__arrow {
+  transform: translateX(4px);
 }
 
 .btn--block {
@@ -205,8 +274,93 @@ ol {
   flex: none;
 }
 
-.check-list--light li {
-  color: var(--body);
+/* --------------------------------------------------------------------------
+   Motion system
+
+   Keyframes shared across sections, plus the scroll-reveal states. Every
+   ambient loop is slow and low-amplitude on purpose — this is a lender's site,
+   so the motion should read as polish, not as a carnival.
+   -------------------------------------------------------------------------- */
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 26px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Slow wander for the blurred colour washes behind the navy sections. */
+@keyframes aurora-drift {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(3%, -2%, 0) scale(1.08);
+  }
+  100% {
+    transform: translate3d(-2%, 2%, 0) scale(1.03);
+  }
+}
+
+/* Draws the tick on instead of popping it in. The dash values live inside the
+   keyframes so an un-animated check still renders as a plain solid mark. */
+@keyframes draw-check {
+  from {
+    stroke-dasharray: 20;
+    stroke-dashoffset: 20;
+  }
+  to {
+    stroke-dasharray: 20;
+    stroke-dashoffset: 0;
+  }
+}
+
+/* --- Scroll reveal -------------------------------------------------------
+   Two halves: `data-reveal` is authored in the JSX and only names the
+   direction, while `.reveal` is added at runtime by lib/revealOnScroll.js at
+   the moment it starts observing the element. Nothing is hidden until that
+   happens, so no-JS and reduced-motion visitors — and any element the observer
+   has not picked up — render in their final state. */
+
+.reveal {
+  opacity: 0;
+  transform: translate3d(0, 24px, 0);
+  transition: opacity 0.75s var(--ease-out), transform 0.75s var(--ease-out);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+.reveal[data-reveal='left'] {
+  transform: translate3d(-30px, 0, 0);
+}
+
+.reveal[data-reveal='right'] {
+  transform: translate3d(30px, 0, 0);
+}
+
+.reveal[data-reveal='zoom'] {
+  transform: scale(0.96);
+}
+
+.reveal[data-reveal='fade'] {
+  transform: none;
+}
+
+.reveal.is-revealed {
+  opacity: 1;
+  transform: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -218,6 +372,9 @@ ol {
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
+    /* Without this the ambient loops (drifting gradients, floating artwork)
+       would still run — thousands of times a second instead of gently. */
+    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
 }

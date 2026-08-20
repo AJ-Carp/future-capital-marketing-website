@@ -1,7 +1,13 @@
 import { STEPS } from '../data/content.js'
 import arrowOne from '../assets/step-arrow-1.png'
 import arrowTwo from '../assets/step-arrow-2.png'
+import revealRef from '../lib/revealOnScroll.js'
 import './Steps.css'
+
+/* One shape, drawn three times: the flat green base plus two gold washes.
+   Kept in a constant so the geometry is written once. */
+const SWOOSH_PATH =
+  'M0 64C249 -101 460 90 570 300S900 520 1440 553V860C1150 715 60 265 0 679Z'
 
 /** Decorative connectors drawn in the gaps between the step cards. */
 const STEP_ARROWS = [
@@ -23,19 +29,64 @@ export default function Steps() {
         aria-hidden="true"
         focusable="false"
       >
-        <path
-          d="M0 64C249 -101 460 90 570 300S900 520 1440 553V860C1150 715 60 265 0 679Z"
-          fill="#17513a"
-        />
+        <defs>
+          {/* Two gold washes over the flat green: one on the crest where the
+              shape starts, one on the tail where it runs off the right edge.
+              userSpaceOnUse so the centres are plain viewBox coordinates
+              rather than fractions of a curved bounding box. */}
+          <radialGradient
+            id="swoosh-gold-top"
+            gradientUnits="userSpaceOnUse"
+            cx="280"
+            cy="20"
+            r="470"
+          >
+            <stop offset="0%" stopColor="#c19a4b" stopOpacity="0.3" />
+            <stop offset="100%" stopColor="#c19a4b" stopOpacity="0" />
+          </radialGradient>
+          <radialGradient
+            id="swoosh-gold-end"
+            gradientUnits="userSpaceOnUse"
+            cx="1440"
+            cy="720"
+            r="470"
+          >
+            <stop offset="0%" stopColor="#c19a4b" stopOpacity="0.32" />
+            <stop offset="100%" stopColor="#c19a4b" stopOpacity="0" />
+          </radialGradient>
+        </defs>
+
+        <path className="steps__swoosh-base" d={SWOOSH_PATH} />
+        <path d={SWOOSH_PATH} fill="url(#swoosh-gold-top)" />
+        <path d={SWOOSH_PATH} fill="url(#swoosh-gold-end)" />
       </svg>
 
       <div className="steps__inner container">
+        {/* The design shows no title here, but the section's aria-labelledby
+            needs something to point at. */}
+        <h2 className="visually-hidden" id="steps-heading">
+          How it works
+        </h2>
+
         <ol className="steps__row">
           {STEPS.map((item, index) => (
             <li className="step-card" key={item.step}>
-              <p className="step-card__label">{item.step}</p>
-              <h3 className="step-card__title">{item.title}</h3>
-              <p className="step-card__body">{item.body}</p>
+              {/* The card's visuals live on this inner panel, not on the <li>.
+                  The reveal animates opacity and transform, either of which
+                  would make the <li> a stacking context and pull the connector
+                  arrow (z-index: -1) out in front of the card — see the note on
+                  .step-card__arrow. Keeping the animation one level in leaves
+                  the arrow where it belongs. */}
+              <div
+                className="step-card__panel"
+                data-reveal
+                ref={revealRef}
+                style={{ '--reveal-delay': `${index * 130}ms` }}
+              >
+                <p className="step-card__label">{item.step}</p>
+                <h3 className="step-card__title">{item.title}</h3>
+                <p className="step-card__body">{item.body}</p>
+              </div>
               {STEP_ARROWS[index] && (
                 <img
                   className={`step-card__arrow step-card__arrow--${index + 1}`}
@@ -44,6 +95,10 @@ export default function Steps() {
                   height={STEP_ARROWS[index].height}
                   alt=""
                   aria-hidden="true"
+                  data-reveal="fade"
+                  ref={revealRef}
+                  /* Trails the card it leaves from. */
+                  style={{ '--reveal-delay': `${index * 130 + 320}ms` }}
                 />
               )}
             </li>
