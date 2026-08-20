@@ -24,7 +24,7 @@ export default function Financing() {
               data-reveal
               ref={revealRef}
               /* Cards arrive in reading order rather than all at once. */
-              style={{ '--reveal-delay': `${index * 110}ms` }}
+              style={{ '--reveal-delay': `${index * 70}ms` }}
             >
               <h3 className="product-card__title">{product.title}</h3>
               <p className="product-card__body">{product.body}</p>

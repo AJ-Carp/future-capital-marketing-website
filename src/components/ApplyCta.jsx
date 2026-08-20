@@ -81,7 +81,7 @@ export default function ApplyCta() {
             className="apply__subhead"
             data-reveal
             ref={revealRef}
-            style={{ '--reveal-delay': '90ms' }}
+            style={{ '--reveal-delay': '60ms' }}
           >
             Apply now and be approved for up to $500,000 in less than 4 hours
           </p>
@@ -90,7 +90,7 @@ export default function ApplyCta() {
             className="apply__list-title"
             data-reveal
             ref={revealRef}
-            style={{ '--reveal-delay': '170ms' }}
+            style={{ '--reveal-delay': '110ms' }}
           >
             In general, you will need:
           </h3>
@@ -100,7 +100,7 @@ export default function ApplyCta() {
                 key={requirement.icon}
                 data-reveal="left"
                 ref={revealRef}
-                style={{ '--reveal-delay': `${250 + index * 90}ms` }}
+                style={{ '--reveal-delay': `${150 + index * 55}ms` }}
               >
                 <span className={`req-icon req-icon--${requirement.icon}`}>
                   <RequirementIcon name={requirement.icon} width="26" height="26" />
@@ -115,7 +115,7 @@ export default function ApplyCta() {
           className="apply__panel"
           data-reveal="right"
           ref={revealRef}
-          style={{ '--reveal-delay': '120ms' }}
+          style={{ '--reveal-delay': '80ms' }}
         >
           {submitted ? (
             <div className="apply__success" role="status">

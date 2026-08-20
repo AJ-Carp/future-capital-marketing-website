@@ -38,7 +38,11 @@ function getObserver() {
           observer.unobserve(entry.target)
         }
       },
-      { rootMargin: '0px 0px -10% 0px', threshold: 0.1 },
+      // Positive bottom margin extends the root box below the viewport, so an
+      // element starts revealing just before it scrolls into sight rather than
+      // after it is already 10% of the way in. threshold 0 fires on the first
+      // pixel that crosses.
+      { rootMargin: '0px 0px 12% 0px', threshold: 0 },
     )
   }
   return observer

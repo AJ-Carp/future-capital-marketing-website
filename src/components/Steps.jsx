@@ -81,7 +81,7 @@ export default function Steps() {
                 className="step-card__panel"
                 data-reveal
                 ref={revealRef}
-                style={{ '--reveal-delay': `${index * 130}ms` }}
+                style={{ '--reveal-delay': `${index * 80}ms` }}
               >
                 <p className="step-card__label">{item.step}</p>
                 <h3 className="step-card__title">{item.title}</h3>
@@ -98,7 +98,7 @@ export default function Steps() {
                   data-reveal="fade"
                   ref={revealRef}
                   /* Trails the card it leaves from. */
-                  style={{ '--reveal-delay': `${index * 130 + 320}ms` }}
+                  style={{ '--reveal-delay': `${index * 80 + 180}ms` }}
                 />
               )}
             </li>
