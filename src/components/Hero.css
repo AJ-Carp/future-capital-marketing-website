@@ -23,7 +23,12 @@
   position: relative;
   z-index: 1;
   display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  /* The art track is sized rather than left as 1fr. Everything inside
+     .hero__art is a percentage of it, so shrinking the track scales the whole
+     composition — arrow and photo together — off one number. 535px is what 1fr
+     resolved to while .container was capped at 1240px, so wide screens are
+     unchanged; 38vw takes over from ~1408px down. */
+  grid-template-columns: minmax(0, 1.05fr) clamp(300px, 38vw, 535px);
   gap: clamp(1.5rem, 4vw, 3rem);
   align-items: center;
   padding-block: clamp(1.5rem, 3vw, 2.5rem) 0;
@@ -190,9 +195,15 @@
      capped at 1240px, so past that width the artwork sits a fixed distance
      from page centre while the viewport edge keeps closing in — the overhang
      goes off screen. Pull the art left by exactly the amount that overflows,
-     and by nothing once it fits. Raise 730px to keep a wider margin from the
-     edge; that constant is the only knob. */
-  transform: translateX(min(0px, calc(50vw - 760px)));
+     and by nothing once it fits. Raise 760px to keep a wider margin from the
+     edge; that constant is the main knob.
+
+     The -140px floor matters: that derivation only holds while the container
+     is capped. Below 1240px it goes full width, and the overhang stops growing
+     (it peaks near 1240px, then eases off) — but the formula would keep pulling
+     harder, up to 260px at 1000px, dragging the artwork under the hero card.
+     140px is the most the pull is ever worth. */
+  transform: translateX(clamp(-140px, calc(50vw - 760px), 0px));
 }
 
 .hero__arrow {
@@ -215,57 +226,158 @@
   filter: drop-shadow(0 26px 42px rgba(0, 0, 0, 0.45));
 }
 
-@media (max-width: 1370px) { 
-
-}
-
-@media (max-width: 1000px) {
-  .hero__inner {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
+/* Still two columns here — this breakpoint changes the treatment, not the
+   layout. The copy loses its white card and sits straight on the navy; the
+   artwork shrinks and stops overhanging. Stacking happens at 800px below. */
+@media (max-width: 1250px) {
   .hero__headline {
-    max-width: 100%;
+    /* Base rule sets a fixed width: 600px, so max-width alone would not
+       override it. Vertical margins in rem, not %, because percentage margins
+       resolve against the container's *width* in both axes. */
+    width: 100%;
+    max-width: 820px;
+    margin: 0.75rem 0 2rem;
+    text-align: left;
   }
 
+  /* No card here — the copy sits straight on the navy, so every property that
+     made this a white panel comes off and the type carries the section on
+     its own. */
   .hero__card {
-    margin-left: 0;
-    max-width: 560px;
+    background: none;
+    box-shadow: none;
+    padding: 0;
+    min-height: auto;
+    color: #fff;
+    width: 100%;
+    max-width: 760px;
+    margin-bottom: 2.75rem;
+    text-align: left;
+  }
+
+  /* The fillets would flare into white that is no longer there. */
+  .hero__card::before,
+  .hero__card::after {
+    display: none;
+  }
+
+  /* Hidden below 1250px — the h1 headline above carries the section on its own
+     and two stacked statements competed. The type styles are inert while this
+     is display: none, kept only so the heading has somewhere to land if it
+     comes back. (--ink is the global h2 colour, wrong on navy.) */
+  .hero__title {
+    display: none;
+    color: #fff;
+    font-size: clamp(2rem, 4.4vw, 3rem);
+    margin-bottom: 1rem;
+  }
+
+  .hero__body {
+    font-size: clamp(1rem, 1.7vw, 1.2rem);
+    color: rgba(255, 255, 255, 0.82);
+    max-width: 54ch;
+    margin-left: 3%;
+    margin-bottom: 1.75rem;
+  }
+
+  /* One tick per row, indented from the body copy. width: fit-content keeps the
+     block only as wide as its longest line so the indent reads as an indent. */
+  .hero__points {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.8rem;
+    width: fit-content;
+    margin-left: 6%;
+    margin-bottom: 1.75rem;
+    text-align: left;
+  }
+
+  .hero__points li {
+    color: rgba(255, 255, 255, 0.92);
+    font-size: clamp(0.95rem, 1.5vw, 1.05rem);
+  }
+
+  /* --green-600 is sized for white backgrounds and goes muddy on navy. */
+  .hero__points li .check-icon {
+    color: var(--mint-400);
+  }
+
+  /* Likewise --link, a mid blue, is close to unreadable against the navy. */
+  .hero__link {
+    color: var(--mint-400);
+    font-size: 0.95rem;
+    margin-left: 3%;
+  }
+
+  .hero__cta {
+    margin-top: 2rem;
   }
 
   .hero__art {
-    order: -1;
-    min-height: 360px;
-    overflow: hidden;
-    margin-inline: calc(var(--gutter) * -1);
-    /* Single column from here down, and the arrow is repositioned to right: 0
-       — the overflow correction above would drag the whole thing off-centre. */
+    /* Bounded and centred in its track rather than overhanging it. The px caps
+       on the arrow and photo are dropped below so the pair scales with this box
+       and fills it — that is what makes centring the box centre the artwork. */
+    width: 100%;
+    max-width: 440px;
+    margin-inline: auto;
+    /* The arrow fills the box width and its height follows its own 558x460
+       aspect, so giving the box that same ratio makes it exactly as tall as the
+       arrow at any width — no min-height to keep in sync, and the photo's
+       percentage height stays proportional automatically.
+
+       align-self must not be stretch for that to work: a stretched grid item
+       takes the row height as a definite height, and aspect-ratio is then
+       ignored. The base rule stretches, so it is overridden here — `end` rather
+       than `center` so the arrow still lands on the section's bottom edge
+       (.hero__inner has no bottom padding) instead of floating above it. */
+    align-self: end;
+    aspect-ratio: 558 / 460;
+    min-height: 0;
+    /* The arrow no longer overhangs (right: 0 below), so there is no overflow
+       left to correct — the pull would only drag the artwork off its track. */
     transform: none;
   }
 
+  /* Positioned as a fraction of the arrow rather than the box, so the pair holds
+     together at any size. Tune `width` and `right` in step: the photo is
+     right-anchored, so changing width alone slides it instead of resizing it. */
   .hero__photo {
-    top: 6%;
-    right: 24%;
-    width: min(68%, 330px);
-    height: 70%;
+    top: 0;
+    right: 39%;
+    width: 73%;
+    height: 74%;
   }
 
   .hero__arrow {
-    top: 4%;
-    bottom: auto;
+    top: auto;
+    bottom: 0;
     right: 0;
-    width: min(96%, 430px);
+    width: 100%;
+  }
+}
+
+/* Two columns stop being viable here. The art track has a 300px floor, so below
+   this the copy column is squeezed to nothing — 116px at a 480px viewport, 11px
+   at 375px. Stack instead; .hero__art is already centred and DOM order puts the
+   copy first. */
+@media (max-width: 800px) {
+  .hero__inner {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
 @media (max-width: 620px) {
   .hero__art {
-    min-height: 280px;
+    /* aspect-ratio sets the height; this is just breathing room under the copy. */
+    margin-top: 20px;
   }
 
   .hero__photo {
-    width: 72%;
-    height: 70%;
-    border-radius: 45% 10% 45% 10%;
+    right: 39%;
+    width: 60%;
+    height: 74%;
+  }
+
+  .hero__cta {
+    justify-content: center;
   }
 }

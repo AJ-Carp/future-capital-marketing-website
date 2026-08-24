@@ -52,23 +52,6 @@
   font-size: 0.9rem;
 }
 
-/* Ticks draw in as the card settles into place. */
-.product-card.is-revealed .check-icon path {
-  animation: draw-check 0.45s var(--ease-out) both;
-}
-
-.product-card.is-revealed .product-card__points li:nth-child(1) .check-icon path {
-  animation-delay: 0.35s;
-}
-
-.product-card.is-revealed .product-card__points li:nth-child(2) .check-icon path {
-  animation-delay: 0.47s;
-}
-
-.product-card.is-revealed .product-card__points li:nth-child(n + 3) .check-icon path {
-  animation-delay: 0.59s;
-}
-
 .product-card__cta {
   margin-top: auto;
 }

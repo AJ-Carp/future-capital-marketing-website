@@ -1,6 +1,5 @@
 import { PRODUCTS } from '../data/content.js'
 import { ArrowRightIcon, CheckIcon } from './Icons.jsx'
-import revealRef from '../lib/revealOnScroll.js'
 import './Financing.css'
 
 export default function Financing() {
@@ -16,16 +15,8 @@ export default function Financing() {
         </h2>
 
         <ul className="financing__grid">
-          {PRODUCTS.map((product, index) => (
-            <li
-              className="product-card"
-              id={product.id}
-              key={product.id}
-              data-reveal
-              ref={revealRef}
-              /* Cards arrive in reading order rather than all at once. */
-              style={{ '--reveal-delay': `${index * 70}ms` }}
-            >
+          {PRODUCTS.map((product) => (
+            <li className="product-card" id={product.id} key={product.id}>
               <h3 className="product-card__title">{product.title}</h3>
               <p className="product-card__body">{product.body}</p>
 

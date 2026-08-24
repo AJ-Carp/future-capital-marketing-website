@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { DEPOSIT_RANGES, REQUIREMENTS } from '../data/content.js'
 import { ArrowRightIcon, ChevronIcon, RequirementIcon } from './Icons.jsx'
-import revealRef from '../lib/revealOnScroll.js'
 import './ApplyCta.css'
 
 const EMPTY_FORM = {
@@ -74,34 +73,17 @@ export default function ApplyCta() {
     <section className="apply" id="apply" aria-labelledby="apply-heading">
       <div className="apply__inner container">
         <div className="apply__copy">
-          <h2 className="display-heading apply__heading" id="apply-heading" data-reveal ref={revealRef}>
+          <h2 className="display-heading apply__heading" id="apply-heading">
             FutureCap has got your back
           </h2>
-          <p
-            className="apply__subhead"
-            data-reveal
-            ref={revealRef}
-            style={{ '--reveal-delay': '60ms' }}
-          >
+          <p className="apply__subhead">
             Apply now and be approved for up to $500,000 in less than 4 hours
           </p>
 
-          <h3
-            className="apply__list-title"
-            data-reveal
-            ref={revealRef}
-            style={{ '--reveal-delay': '110ms' }}
-          >
-            In general, you will need:
-          </h3>
+          <h3 className="apply__list-title">In general, you will need:</h3>
           <ul className="apply__requirements">
-            {REQUIREMENTS.map((requirement, index) => (
-              <li
-                key={requirement.icon}
-                data-reveal="left"
-                ref={revealRef}
-                style={{ '--reveal-delay': `${150 + index * 55}ms` }}
-              >
+            {REQUIREMENTS.map((requirement) => (
+              <li key={requirement.icon}>
                 <span className={`req-icon req-icon--${requirement.icon}`}>
                   <RequirementIcon name={requirement.icon} width="26" height="26" />
                 </span>
@@ -111,12 +93,7 @@ export default function ApplyCta() {
           </ul>
         </div>
 
-        <div
-          className="apply__panel"
-          data-reveal="right"
-          ref={revealRef}
-          style={{ '--reveal-delay': '80ms' }}
-        >
+        <div className="apply__panel">
           {submitted ? (
             <div className="apply__success" role="status">
               {/* Stroke-drawn tick — the one moment on the page worth a small

@@ -1,7 +1,6 @@
 import { STEPS } from '../data/content.js'
 import arrowOne from '../assets/step-arrow-1.png'
 import arrowTwo from '../assets/step-arrow-2.png'
-import revealRef from '../lib/revealOnScroll.js'
 import './Steps.css'
 
 /* One shape, drawn three times: the flat green base plus two gold washes.
@@ -72,17 +71,10 @@ export default function Steps() {
           {STEPS.map((item, index) => (
             <li className="step-card" key={item.step}>
               {/* The card's visuals live on this inner panel, not on the <li>.
-                  The reveal animates opacity and transform, either of which
-                  would make the <li> a stacking context and pull the connector
-                  arrow (z-index: -1) out in front of the card — see the note on
-                  .step-card__arrow. Keeping the animation one level in leaves
-                  the arrow where it belongs. */}
-              <div
-                className="step-card__panel"
-                data-reveal
-                ref={revealRef}
-                style={{ '--reveal-delay': `${index * 80}ms` }}
-              >
+                  Anything that makes the <li> a stacking context pulls the
+                  connector arrow (z-index: -1) out in front of the card — see
+                  the note on .step-card__arrow. */}
+              <div className="step-card__panel">
                 <p className="step-card__label">{item.step}</p>
                 <h3 className="step-card__title">{item.title}</h3>
                 <p className="step-card__body">{item.body}</p>
@@ -95,10 +87,6 @@ export default function Steps() {
                   height={STEP_ARROWS[index].height}
                   alt=""
                   aria-hidden="true"
-                  data-reveal="fade"
-                  ref={revealRef}
-                  /* Trails the card it leaves from. */
-                  style={{ '--reveal-delay': `${index * 80 + 180}ms` }}
                 />
               )}
             </li>

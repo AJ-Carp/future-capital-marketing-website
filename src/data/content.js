@@ -46,15 +46,13 @@ export const NAV = [
 export const HERO = {
   headline: "Secure your business's future with FutureCap",
   title: 'Fast business funding when you need it most',
-  body: 'Get approved in as little as 4 hours with funding up to $500,000. No collateral required. We advance capital based on your future sales, not your credit score.',
+  body: 'Get approved in as little as 4 hours with funding up to $500,000 — no collateral required.',
   points: [
-    'Apply online in minutes — no lengthy paperwork',
+    'Approval based on revenue, not your credit score',
     'Flexible repayment tied to your daily sales',
-    'Funding from $5,000 to $500,000',
-    'Bad credit? No problem — approval based on revenue',
-    'Use funds for any business purpose',
+    'Apply online in minutes — no lengthy paperwork',
   ],
-  linkText: 'See how much you qualify for. It takes less than 2 minutes.',
+  linkText: 'See how much you qualify for — under 2 minutes.',
   ctaText: 'Get Started',
 }
 
