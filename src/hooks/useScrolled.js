@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 /**
  * Scroll offsets at which the header condenses and expands again.
@@ -15,32 +15,20 @@ const CONDENSE_AT = 72
 const EXPAND_AT = 24
 
 /**
- * Tracks how far down the page the visitor has scrolled.
+ * True once the visitor has scrolled far enough for the header to condense.
  *
- * Returns `{ scrolled, progressRef }`. Attach `progressRef` to the progress
- * bar: its scaleX is written straight to the node, because routing a value
- * that changes every frame through React state would re-render the whole
- * header on every frame of every scroll. Only `scrolled` is state, and it
- * changes twice a page. Reads are batched into an animation frame, so a fast
- * scroll costs one measurement per frame rather than one per event.
+ * Reads are batched into an animation frame, so a fast scroll costs one
+ * measurement per frame rather than one per event.
  */
-export default function useScrollProgress() {
+export default function useScrolled() {
   const [scrolled, setScrolled] = useState(false)
-  const progressRef = useRef(null)
 
   useEffect(() => {
     let frame = 0
 
     function measure() {
       frame = 0
-      const el = document.documentElement
-      const max = el.scrollHeight - window.innerHeight
       const y = window.scrollY
-      const progress = max > 0 ? Math.min(y / max, 1) : 0
-
-      if (progressRef.current) {
-        progressRef.current.style.transform = `scaleX(${progress})`
-      }
       // Returning the same value makes React skip the re-render entirely.
       setScrolled((prev) => (prev ? y > EXPAND_AT : y > CONDENSE_AT))
     }
@@ -59,5 +47,5 @@ export default function useScrollProgress() {
     }
   }, [])
 
-  return { scrolled, progressRef }
+  return scrolled
 }

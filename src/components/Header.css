@@ -23,23 +23,6 @@
   box-shadow: 0 14px 34px -20px rgba(16, 24, 40, 0.55);
 }
 
-.header__progress {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -1px;
-  height: 3px;
-  transform-origin: left center;
-  transform: scaleX(0);
-  background: linear-gradient(
-    90deg,
-    var(--green-700),
-    var(--green-500) 45%,
-    var(--gold)
-  );
-  pointer-events: none;
-}
-
 .header__inner {
   /* Header is wider than the 1240px content column below it. */
   max-width: 1600px;

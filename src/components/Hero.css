@@ -45,6 +45,7 @@
 }
 
 .hero__card {
+  position: relative;
   background: var(--surface);
   color: var(--body);
   /* Square at the bottom — the card meets the section edge. */
@@ -56,6 +57,44 @@
   /* Pins the card to the bottom edge of the section, as in the design. */
   margin-top: auto;
   animation: rise-in 0.9s var(--ease-out) 0.18s both;
+  --fillet: clamp(20px, 4vw, 56px);
+}
+
+/* The card runs straight into the white section below, so its base flares
+   outward on both sides instead of stopping square. border-radius only curves
+   inward, so each fillet is a white square with a quarter-disc punched out of
+   its outer corner by a radial gradient. */
+.hero__card::before,
+.hero__card::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  /* 1px wider than the fillet so each one laps under the card edge — two
+     layers meeting exactly on a boundary leave a hairline at fractional
+     layout positions. The extra pixel is white on white, so it never shows. */
+  width: calc(var(--fillet) + 1px);
+  height: var(--fillet);
+  pointer-events: none;
+}
+
+/* Fading to `transparent` would fade towards transparent *black* and leave a
+   grey fringe along the curve, so the open end is a transparent white. */
+.hero__card::before {
+  right: calc(100% - 1px);
+  background: radial-gradient(
+    circle at top left,
+    rgba(255, 255, 255, 0) calc(var(--fillet) - 0.5px),
+    var(--surface) calc(var(--fillet) + 0.5px)
+  );
+}
+
+.hero__card::after {
+  left: calc(100% - 1px);
+  background: radial-gradient(
+    circle at top right,
+    rgba(255, 255, 255, 0) calc(var(--fillet) - 0.5px),
+    var(--surface) calc(var(--fillet) + 0.5px)
+  );
 }
 
 .hero__title {
@@ -147,6 +186,13 @@
   align-self: stretch;
   min-height: 490px;
   animation: fade-in 1.1s ease 0.1s both;
+  /* The arrow is deliberately overhung (right: -28% below) and .container is
+     capped at 1240px, so past that width the artwork sits a fixed distance
+     from page centre while the viewport edge keeps closing in — the overhang
+     goes off screen. Pull the art left by exactly the amount that overflows,
+     and by nothing once it fits. Raise 730px to keep a wider margin from the
+     edge; that constant is the only knob. */
+  transform: translateX(min(0px, calc(50vw - 760px)));
 }
 
 .hero__arrow {
@@ -169,13 +215,9 @@
   filter: drop-shadow(0 26px 42px rgba(0, 0, 0, 0.45));
 }
 
-/* .hero__photo {
-  position: absolute;
-  top: 40%;
-  right: 30%;
-  height: auto;
-  border-radius: 0% 0% 0% 0%;
-} */
+@media (max-width: 1370px) { 
+
+}
 
 @media (max-width: 1000px) {
   .hero__inner {
@@ -196,6 +238,9 @@
     min-height: 360px;
     overflow: hidden;
     margin-inline: calc(var(--gutter) * -1);
+    /* Single column from here down, and the arrow is repositioned to right: 0
+       — the overflow correction above would drag the whole thing off-centre. */
+    transform: none;
   }
 
   .hero__photo {

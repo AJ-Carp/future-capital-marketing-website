@@ -21,9 +21,9 @@ export const NAV = [
     label: 'Loans and Financing',
     items: [
       { label: 'Merchant Cash Advance', href: '#merchant-cash-advance' },
-      { label: 'Working Capital Loans', href: '#working-capital-loans' },
-      { label: 'Business Line of Credit', href: '#business-line-of-credit' },
-      { label: 'More financing options', href: '#more-financing-options' },
+      { label: 'Term Loan', href: '#term-loan' },
+      { label: 'Equipment Financing', href: '#equipment-financing' },
+      { label: 'Home Equity Line of Credit', href: '#home-equity-line-of-credit' },
     ],
   },
   {
@@ -39,7 +39,6 @@ export const NAV = [
     items: [
       { label: 'About FutureCap', href: '#about' },
       { label: 'How it works', href: '#how-it-works' },
-      { label: 'Customer reviews', href: '#reviews' },
     ],
   },
 ]
@@ -71,33 +70,33 @@ export const PRODUCTS = [
     ],
   },
   {
-    id: 'working-capital-loans',
-    title: 'Working Capital Loans',
-    body: 'Access flexible working capital loans to cover operational expenses, payroll, and growth opportunities with competitive rates.',
+    id: 'term-loan',
+    title: 'Term Loan',
+    body: "Borrow a lump sum and repay it in fixed installments over a set term, with predictable payments that make budgeting simple.",
     points: [
-      'Competitive interest rates',
-      'Flexible repayment terms up to 36 months',
-      'No collateral required for qualified businesses',
+      'Fixed monthly payments',
+      'Terms from 6 to 60 months',
+      'Funding up to $500,000',
     ],
   },
   {
-    id: 'business-line-of-credit',
-    title: 'Business Line of Credit',
-    body: 'Access flexible working capital loans to cover operational expenses, payroll, and growth opportunities with competitive rates.',
+    id: 'equipment-financing',
+    title: 'Equipment Financing',
+    body: "Finance new or used equipment for your business without tying up cash flow, using the equipment itself as collateral.",
     points: [
-      'Competitive interest rates',
-      'Flexible repayment terms up to 36 months',
-      'No collateral required for qualified businesses',
+      'Finance up to 100% of equipment cost',
+      'The equipment secures the loan — no extra collateral',
+      'Preserve cash flow for day-to-day operations',
     ],
   },
   {
-    id: 'more-financing-options',
-    title: 'More financing options',
-    body: 'Access flexible working capital loans to cover operational expenses, payroll, and growth opportunities with competitive rates.',
+    id: 'home-equity-line-of-credit',
+    title: 'Home Equity Line of Credit',
+    body: "Tap into your home's equity for a flexible line of credit you can draw from as needed, paying interest only on what you use.",
     points: [
-      'Competitive interest rates',
-      'Flexible repayment terms up to 36 months',
-      'No collateral required for qualified businesses',
+      'Draw funds as needed, up to your credit limit',
+      'Interest charged only on the amount you use',
+      'Competitive rates secured by home equity',
     ],
   },
 ]
